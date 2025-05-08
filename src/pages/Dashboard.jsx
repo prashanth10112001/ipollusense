@@ -15,6 +15,7 @@ import AtAGlanceCard from "../components/AtAGlanceCard";
 import GraphWithFeatureSelection from "../components/GraphWithFeatureSelection";
 import SensorDataCards from "../components/SensorDataCards";
 import AboutProjectModel from "../components/AboutProjectModel";
+import Navbar from "../components/Navbar";
 
 const API_URL = "http://localhost:3500/api/node/"; // Default API for recent data
 const FILTERED_API_URL = "http://localhost:3500/api/node/filter"; // New API for filtered data based on date
@@ -319,7 +320,7 @@ const Dashboard = () => {
 
   return (
     <div style={{ backgroundColor: "#F5F5F5", width: "100%" }}>
-      <AppBar position="static" style={{ backgroundColor: "#1565C0" }}>
+      {/* <AppBar position="static" style={{ backgroundColor: "#1565C0" }}>
         <Toolbar>
           <FiCloud
             size={30}
@@ -338,7 +339,9 @@ const Dashboard = () => {
                 )} seconds ago`}
           </Typography>
         </Toolbar>
-      </AppBar>
+      </AppBar> */}
+
+      <Navbar isLoading={isLoading} sensorData={sensorData} />
 
       <div>
         <AtAGlanceCard
