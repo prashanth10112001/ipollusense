@@ -977,6 +977,7 @@ import Report from "./pages/Report";
 import Navbar from "./components/Navbar";
 
 const App = () => {
+  const [nodeValue, setNodeValue] = useState(1192);
   const [sensorDataFromDashboard, setSensorDataFromDashboard] = useState([]);
   const [isLoadingFromDashboard, setIsLoadingFromDashboard] = useState(false);
 
@@ -991,12 +992,14 @@ const App = () => {
           path="/"
           element={
             <Dashboard
+              nodeValue={nodeValue}
+              setNodeValue={setNodeValue}
               setSensorDataInApp={setSensorDataFromDashboard}
               setIsLoadingInApp={setIsLoadingFromDashboard}
             />
           }
         />
-        <Route path="/report" element={<Report />} />
+        <Route path="/report" element={<Report nodeValue={nodeValue} />} />
       </Routes>
     </Router>
   );

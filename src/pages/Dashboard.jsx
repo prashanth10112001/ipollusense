@@ -66,13 +66,18 @@ const fetchSensorData = async (
   }
 };
 
-const Dashboard = ({ setSensorDataInApp, setIsLoadingInApp }) => {
+const Dashboard = ({
+  nodeValue,
+  setNodeValue,
+  setSensorDataInApp,
+  setIsLoadingInApp,
+}) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [formStartDate, setFormStartDate] = useState("");
   const [formEndDate, setFormEndDate] = useState("");
-  const [nodeValue, setNodeValue] = useState(1192); // Store the nodeValue selected by user
+  // const [nodeValue, setNodeValue] = useState(1192); // Store the nodeValue selected by user
   const [isDefaultView, setIsDefaultView] = useState(true); // Default view is true
   const [isSubmitClicked, setIsSubmitClicked] = useState(false); // Track if submit button was clicked
   //   const [viewType, setViewType] = useState("indoor"); // Default view is indoor AQI
@@ -226,7 +231,7 @@ const Dashboard = ({ setSensorDataInApp, setIsLoadingInApp }) => {
     setEndDate("");
     setFormStartDate("");
     setFormEndDate("");
-    setNodeValue(1192);
+    // setNodeValue(1192);
     setErrorMessage(""); // Clear any previous error messages
     setCurrentPage(1);
     setIsRecent(true);
