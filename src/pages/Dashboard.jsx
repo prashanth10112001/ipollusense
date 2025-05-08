@@ -1,21 +1,11 @@
 import React, { useState, useEffect } from "react";
-import {
-  AppBar,
-  Toolbar,
-  Typography,
-  Box,
-  TextField,
-  Button,
-  Grid,
-} from "@mui/material";
-import { FiCloud } from "react-icons/fi";
+import { Typography, Box, TextField, Button, Grid } from "@mui/material";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import AtAGlanceCard from "../components/AtAGlanceCard";
 import GraphWithFeatureSelection from "../components/GraphWithFeatureSelection";
 import SensorDataCards from "../components/SensorDataCards";
 import AboutProjectModel from "../components/AboutProjectModel";
-import Navbar from "../components/Navbar";
 
 const API_URL = "http://localhost:3500/api/node/"; // Default API for recent data
 const FILTERED_API_URL = "http://localhost:3500/api/node/filter"; // New API for filtered data based on date
@@ -121,7 +111,13 @@ const Dashboard = ({ setSensorDataInApp, setIsLoadingInApp }) => {
     setSensorDataInApp(sensorData);
     setIsLoadingInApp(isLoading);
     console.log("Current page updated:", currentPage);
-  }, [currentPage, sensorData, isLoading]);
+  }, [
+    currentPage,
+    sensorData,
+    isLoading,
+    setSensorDataInApp,
+    setIsLoadingInApp,
+  ]);
 
   const getFilteredSensorData = () => {
     if (isDefaultView && isSuccess) {
@@ -140,10 +136,12 @@ const Dashboard = ({ setSensorDataInApp, setIsLoadingInApp }) => {
       //     }) || [];
 
       return (
-        sensorData?.data?.filter(({ nodeValue: nv, createdAt }) => {
+        sensorData?.data?.filter(({ nodeValue: node, createdAt }) => {
           const itemDate = new Date(createdAt).getTime();
           return (
-            nv === parseInt(nodeValue) && itemDate >= start && itemDate <= end
+            parseInt(nv) === parseInt(node) &&
+            itemDate >= start &&
+            itemDate <= end
           );
         }) || []
       );
