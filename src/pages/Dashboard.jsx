@@ -76,7 +76,7 @@ const fetchSensorData = async (
   }
 };
 
-const Dashboard = () => {
+const Dashboard = ({ setSensorDataInApp }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
