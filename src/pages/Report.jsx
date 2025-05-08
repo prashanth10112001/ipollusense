@@ -287,8 +287,8 @@ const Report = ({ nodeValue }) => {
     const interval = setInterval(() => {
       console.log("Checking for new reports...");
       fetchReports();
-      // }, 5 * 60 * 1000); // every 5 minutes
-    }, 1 * 60 * 1000); // every 5 minutes
+    }, 5 * 60 * 1000); // every 5 minutes
+    // }, 1 * 60 * 1000); // every 1 minutes
 
     return () => clearInterval(interval); // cleanup on unmount
   }, []);
