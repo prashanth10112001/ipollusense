@@ -973,14 +973,30 @@ import React, { useState } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 import Dashboard from "./pages/Dashboard";
+import Report from "./pages/Report";
 import Navbar from "./components/Navbar";
 
 const App = () => {
+  const [sensorDataFromDashboard, setSensorDataFromDashboard] = useState([]);
+  const [isLoadingFromDashboard, setIsLoadingFromDashboard] = useState(false);
+
   return (
     <Router>
+      <Navbar
+        sensorData={sensorDataFromDashboard}
+        isLoading={isLoadingFromDashboard}
+      />
       <Routes>
-        <Route path="/" element={<Dashboard />} />
-        {/* <Route path="/reports" element={<ReportPage />} /> */}
+        <Route
+          path="/"
+          element={
+            <Dashboard
+              setSensorDataInApp={setSensorDataFromDashboard}
+              setIsLoadingInApp={setIsLoadingFromDashboard}
+            />
+          }
+        />
+        <Route path="/report" element={<Report />} />
       </Routes>
     </Router>
   );

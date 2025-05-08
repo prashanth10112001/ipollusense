@@ -76,7 +76,7 @@ const fetchSensorData = async (
   }
 };
 
-const Dashboard = () => {
+const Dashboard = ({ setSensorDataInApp, setIsLoadingInApp }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
@@ -118,8 +118,10 @@ const Dashboard = () => {
   };
 
   useEffect(() => {
+    setSensorDataInApp(sensorData);
+    setIsLoadingInApp(isLoading);
     console.log("Current page updated:", currentPage);
-  }, [currentPage]);
+  }, [currentPage, sensorData, isLoading]);
 
   const getFilteredSensorData = () => {
     if (isDefaultView && isSuccess) {
@@ -341,7 +343,7 @@ const Dashboard = () => {
         </Toolbar>
       </AppBar> */}
 
-      <Navbar isLoading={isLoading} sensorData={sensorData} />
+      {/* <Navbar isLoading={isLoading} sensorData={sensorData} /> */}
 
       <div>
         <AtAGlanceCard
