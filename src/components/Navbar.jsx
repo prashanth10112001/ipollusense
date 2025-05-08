@@ -67,6 +67,30 @@ function Navbar({ isLoading, sensorData }) {
 
         <div style={{ display: "flex", alignItems: "center" }}>
           <Link
+            to="/"
+            style={{
+              color: "white",
+              textDecoration: "none",
+              marginRight: isSmallScreen ? "10px" : "20px",
+              fontWeight: "500",
+              padding: isSmallScreen ? "5px 10px" : "8px 16px",
+              borderRadius: "5px",
+              transition: "background-color 0.3s ease",
+            }}
+          >
+            <Button
+              variant="text"
+              style={{
+                color: "white",
+                fontWeight: "500",
+                textTransform: "none",
+                fontSize: isSmallScreen ? "12px" : "16px", // Adjust font size for small screens
+              }}
+            >
+              Home
+            </Button>
+          </Link>
+          <Link
             to="/report"
             style={{
               color: "white",
