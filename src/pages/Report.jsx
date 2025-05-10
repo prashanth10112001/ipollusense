@@ -27,6 +27,39 @@ import {
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import axios from "axios";
 
+const getAQIColor = (aqi) => {
+  if (aqi <= 1) return "#00E400";
+  if (aqi > 1 && aqi <= 2) return "#FFFF00";
+  if (aqi > 2 && aqi <= 3) return "#FF7E00";
+  if (aqi > 3 && aqi <= 4) return "#FF0000";
+  if (aqi > 4 && aqi <= 5) return "#8F3F97";
+  if (aqi > 5 && aqi <= 6) return "#7E0023";
+  return "darkred";
+};
+
+const AQI_LEVELS = {
+  1: { label: "Good", color: "#00E400" },
+  2: { label: "Moderate", color: "#FFFF00" },
+  3: { label: "Satisfactory", color: "#FF7E00" },
+  4: { label: "Poor", color: "#FF0000" },
+  5: { label: "Very Poor", color: "#8F3F97" },
+  6: { label: "Severe", color: "#7E0023" },
+};
+
+const COLORS = [
+  "#0088FE",
+  "#00C49F",
+  "#FFBB28",
+  "#FF8042",
+  "#8884d8",
+  "#d84f4f",
+];
+
+const formatTime = (dateString) => {
+  const date = new Date(dateString);
+  return date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+};
+
 const Report = ({ nodeValue }) => {
   const [view, setView] = useState("2hr");
 
@@ -84,29 +117,34 @@ const Report = ({ nodeValue }) => {
     return () => clearInterval(interval);
   }, [fetchReports]);
 
-  const getAQIColor = (aqi) => {
-    if (aqi <= 1) return "#00E400";
-    if (aqi > 1 && aqi <= 2) return "#FFFF00";
-    if (aqi > 2 && aqi <= 3) return "#FF7E00";
-    if (aqi > 3 && aqi <= 4) return "#FF0000";
-    if (aqi > 4 && aqi <= 5) return "#8F3F97";
-    if (aqi > 5 && aqi <= 6) return "#7E0023";
-    return "darkred";
-  };
-
-  const AQI_LEVELS = {
-    1: { label: "Good", color: "#00E400" },
-    2: { label: "Moderate", color: "#FFFF00" },
-    3: { label: "Satisfactory", color: "#FF7E00" },
-    4: { label: "Poor", color: "#FF0000" },
-    5: { label: "Very Poor", color: "#8F3F97" },
-    6: { label: "Severe", color: "#7E0023" },
-  };
-
-  const formatTime = (dateString) => {
-    const date = new Date(dateString);
-    return date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
-  };
+  const renderAQILegend = () => (
+    <Box
+      sx={{
+        mb: 3,
+        display: "flex",
+        flexWrap: "wrap",
+        justifyContent: "center",
+      }}
+    >
+      {Object.entries(AQI_LEVELS).map(([level, { label, color }]) => (
+        <Box
+          key={level}
+          sx={{ display: "flex", alignItems: "center", mr: 2, mb: 1 }}
+        >
+          <Box
+            sx={{
+              width: 20,
+              height: 20,
+              backgroundColor: color,
+              marginRight: 1,
+              borderRadius: "10%",
+            }}
+          />
+          <Typography sx={{ fontSize: "12px" }}>{label}</Typography>
+        </Box>
+      ))}
+    </Box>
+  );
 
   const renderTwoHourTable = () => {
     const groupedReports = {};
@@ -211,106 +249,6 @@ const Report = ({ nodeValue }) => {
       </>
     );
   };
-
-  const COLORS = [
-    "#0088FE",
-    "#00C49F",
-    "#FFBB28",
-    "#FF8042",
-    "#8884d8",
-    "#d84f4f",
-  ];
-
-  const renderPieChart = (title, data, isPercentage = false) => (
-    <Box
-      sx={{
-        width: { xs: "100%", sm: "300px", md: "320px" },
-        height: { xs: 200, sm: 280, md: 300 },
-        mb: 6,
-      }}
-    >
-      <Typography
-        variant="h6"
-        sx={{
-          mb: 2,
-          fontSize: { xs: "14px", sm: "16px", md: "18px" },
-          textAlign: "center",
-        }}
-      >
-        {title}
-      </Typography>
-      <ResponsiveContainer width="100%" height="100%">
-        <PieChart>
-          <Pie
-            data={data}
-            cx="50%"
-            cy="50%"
-            // label={({ name }) => name}
-            outerRadius="80%"
-            dataKey="value"
-          >
-            {data.map((_, index) => (
-              <Cell
-                key={`cell-${index}`}
-                fill={COLORS[index % COLORS.length]}
-              />
-            ))}
-          </Pie>
-          <Tooltip
-            content={({ active, payload }) => {
-              if (!active || !payload || !payload.length) return null;
-              const item = payload[0];
-              return (
-                <Box
-                  sx={{
-                    display: "flex",
-                    flexDirection: "column",
-                    justifyContent: "space-between",
-                    alignItems: "center",
-                    backgroundColor: "white",
-                    p: 1,
-                    border: "1px solid #ccc",
-                    borderRadius: "4px",
-                    fontSize: "12px",
-                  }}
-                >
-                  <p>
-                    <strong>Time : </strong>
-                    {item.name}
-                  </p>
-                  <div>
-                    <strong>{item.dataKey} : </strong>
-                    <strong>
-                      {isPercentage
-                        ? ` ${item.value.toFixed(2)}%`
-                        : ` ${item.value.toFixed(2)}`}
-                    </strong>
-                  </div>
-                </Box>
-              );
-            }}
-          />
-          <Legend
-            layout="horizontal"
-            verticalAlign="bottom"
-            align="center"
-            wrapperStyle={{
-              fontSize: "12px",
-              fontWeight: "bold",
-              paddingTop: 10,
-              paddingLeft: 10,
-              paddingRight: 10,
-              display: "flex",
-              flexWrap: "wrap", // 🔁 This allows the items to wrap
-              justifyContent: "center",
-              maxWidth: "90%", // 🔒 Prevents overflow
-              margin: "auto",
-            }}
-          />
-        </PieChart>
-      </ResponsiveContainer>
-    </Box>
-  );
 
   const renderDailyTable = () => {
     return (
@@ -444,32 +382,94 @@ const Report = ({ nodeValue }) => {
     );
   };
 
-  const renderAQILegend = () => (
+  const renderPieChart = (title, data, isPercentage = false) => (
     <Box
       sx={{
-        mb: 3,
-        display: "flex",
-        flexWrap: "wrap",
-        justifyContent: "center",
+        width: { xs: "100%", sm: "300px", md: "320px" },
+        height: { xs: 200, sm: 280, md: 300 },
+        mb: 6,
       }}
     >
-      {Object.entries(AQI_LEVELS).map(([level, { label, color }]) => (
-        <Box
-          key={level}
-          sx={{ display: "flex", alignItems: "center", mr: 2, mb: 1 }}
-        >
-          <Box
-            sx={{
-              width: 20,
-              height: 20,
-              backgroundColor: color,
-              marginRight: 1,
-              borderRadius: "10%",
+      <Typography
+        variant="h6"
+        sx={{
+          mb: 2,
+          fontSize: { xs: "14px", sm: "16px", md: "18px" },
+          textAlign: "center",
+        }}
+      >
+        {title}
+      </Typography>
+      <ResponsiveContainer width="100%" height="100%">
+        <PieChart>
+          <Pie
+            data={data}
+            cx="50%"
+            cy="50%"
+            // label={({ name }) => name}
+            outerRadius="80%"
+            dataKey="value"
+          >
+            {data.map((_, index) => (
+              <Cell
+                key={`cell-${index}`}
+                fill={COLORS[index % COLORS.length]}
+              />
+            ))}
+          </Pie>
+          <Tooltip
+            content={({ active, payload }) => {
+              if (!active || !payload || !payload.length) return null;
+              const item = payload[0];
+              return (
+                <Box
+                  sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                    backgroundColor: "white",
+                    p: 1,
+                    border: "1px solid #ccc",
+                    borderRadius: "4px",
+                    fontSize: "12px",
+                  }}
+                >
+                  <p>
+                    <strong>Time : </strong>
+                    {item.name}
+                  </p>
+                  <div>
+                    <strong>{item.dataKey} : </strong>
+                    <strong>
+                      {isPercentage
+                        ? ` ${item.value.toFixed(2)}%`
+                        : ` ${item.value.toFixed(2)}`}
+                    </strong>
+                  </div>
+                </Box>
+              );
             }}
           />
-          <Typography sx={{ fontSize: "12px" }}>{label}</Typography>
-        </Box>
-      ))}
+          <Legend
+            layout="horizontal"
+            verticalAlign="bottom"
+            align="center"
+            wrapperStyle={{
+              fontSize: "12px",
+              fontWeight: "bold",
+              paddingTop: 10,
+              paddingLeft: 10,
+              paddingRight: 10,
+              display: "flex",
+              flexWrap: "wrap", // 🔁 This allows the items to wrap
+              justifyContent: "center",
+              maxWidth: "90%", // 🔒 Prevents overflow
+              margin: "auto",
+            }}
+          />
+        </PieChart>
+      </ResponsiveContainer>
     </Box>
   );
 
