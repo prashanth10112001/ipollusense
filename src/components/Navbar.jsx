@@ -71,9 +71,9 @@ function Navbar({ isLoading, sensorData }) {
             style={{
               color: "white",
               textDecoration: "none",
-              marginRight: isSmallScreen ? "10px" : "20px",
+              marginRight: isSmallScreen ? "0px" : "20px",
               fontWeight: "500",
-              padding: isSmallScreen ? "5px 10px" : "8px 16px",
+              padding: isSmallScreen ? "0px" : "8px 16px",
               borderRadius: "5px",
               transition: "background-color 0.3s ease",
             }}

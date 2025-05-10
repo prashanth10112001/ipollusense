@@ -1051,7 +1051,7 @@ const GraphWithFeatureSelection = ({ data, startDate, endDate }) => {
         <Button
           variant="contained"
           onClick={() => setShowActualData((prev) => !prev)}
-          sx={{ height: 56, minWidth: { xs: "100%", sm: 200 } }} // full width on mobile
+          sx={{ height: 56, minWidth: { xs: "100%", sm: 100 } }} // full width on mobile
         >
           {showActualData ? "Show Scaled Data" : "Show Actual Data"}
         </Button>
